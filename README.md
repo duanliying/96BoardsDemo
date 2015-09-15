@@ -30,7 +30,7 @@ library does the rest.
 So to install the library and test it with the example blink code you need
 to do the following:
 
-**$ https://github.com/dmandala/96BoardsDemo.git**  
+**$ git clone https://github.com/dmandala/96BoardsDemo.git**  
 **$ $cd 96Boardsdemo/demo**  
 **$ make**  
 **$ sudo ./demo**  
