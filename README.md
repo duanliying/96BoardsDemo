@@ -30,11 +30,10 @@ library does the rest.
 So to install the library and test it with the example blink code you need
 to do the following:
 
-**git clone https://github.com/???? 
-
-cd 96Boardsdemo/demo  
-make  
-sudo ./demo  
+**$ https://github.com/dmandala/96BoardsDemo.git**  
+**$ $cd 96Boardsdemo/demo**  
+**$ make**  
+**$ sudo ./demo**  
 
 The code so far has been tested on a Dragonboard 410 c where it is known to
 work very well.
