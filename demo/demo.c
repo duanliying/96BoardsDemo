@@ -61,12 +61,19 @@ void open_valve(void){
     digitalWrite(GPIO_P7, HIGH);
     digitalWrite(GPIO_P8, HIGH);
     printf("Valve Open\n");
+    sleep(3);
+    digitalWrite(GPIO_P7, LOW);
+    digitalWrite(GPIO_P8, LOW);
+
 }
 
 void close_valve(void){
-    digitalWrite(GPIO_P7, LOW);
+    digitalWrite(GPIO_P7, HIGH);
     digitalWrite(GPIO_P8, LOW);
     printf("Valve Closed\n");
+    sleep(3);
+    digitalWrite(GPIO_P7, LOW);
+    digitalWrite(GPIO_P8, LOW);
 }
 
 
@@ -122,6 +129,7 @@ int main(){
             
         }
         sleep(5);
+
     }
     return (0);
 }
