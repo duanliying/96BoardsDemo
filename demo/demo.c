@@ -33,7 +33,7 @@
 #include <gpio.h>
 #include <unistd.h>
 
-#define GPIO_OFFSET 23
+#define GPIO_OFFSET 0
 #define NUM_PINS 8
 
 #define GPIO_P1 23
@@ -41,9 +41,11 @@
 #define GPIO_P3 25
 #define GPIO_P4 26
 #define GPIO_P5 27
-#define GPIO_P6 28
-#define GPIO_P7 29
-#define GPIO_P8 30
+#define GPIO_P6 29
+#define GPIO_P7 30
+#define GPIO_P8 31
+
+int gpio_p[] = { GPIO_P1, GPIO_P2, GPIO_P3, GPIO_P4, GPIO_P5, GPIO_P6, GPIO_P7, GPIO_P8}; 
 
 void relay_on( int pin ){
     digitalWrite(pin, HIGH);
@@ -86,44 +88,44 @@ int main(){
         // Low Speed Expansion Connector. This could have been
         // done in other ways too.
         for (x=GPIO_OFFSET;x<GPIO_OFFSET+NUM_PINS;x++){
-            open_GPIO_Board_pin_number(x);
+            open_GPIO_Board_pin_number(gpio_p[x]);
             // Now set allports that we are using to out
-            setup_GPIO(x, "out");
+            setup_GPIO(gpio_p[x], "out");
         }
         
         for (loop1 = 500;loop1;loop1--){
             open_valve();
             for( loop2 = 5;loop2;loop2--){
                 for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_on(x);
+                    relay_on(gpio_p[x]);
                 }
                 for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_off(x);
+                    relay_off(gpio_p[x]);
                 }
             }
             for( loop2 = 5;loop2;loop2--){
                 for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_on(x);
+                    relay_on(gpio_p[x]);
                 }
                 for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_off(x);
+                    relay_off(gpio_p[x]);
                 }
             }
             close_valve();
             for( loop2 = 5;loop2;loop2--){
                 for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_on(x);
+                    relay_on(gpio_p[x]);
                 }
                 for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_off(x);
+                    relay_off(gpio_p[x]);
                 }
             }
             for( loop2 = 5;loop2;loop2--){
                 for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_on(x);
+                    relay_on(gpio_p[x]);
                 }
                 for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_off(x);
+                    relay_off(gpio_p[x]);
                 }
             }
             
