@@ -60,22 +60,22 @@ void relay_off(int pin){
 }
 
 void open_valve(void){
-    digitalWrite(GPIO_P7, HIGH);
-    digitalWrite(GPIO_P8, HIGH);
+    digitalWrite(gpio_by_pin(GPIO_P7), HIGH);
+    digitalWrite(gpio_by_pin(GPIO_P8), HIGH);
     printf("Valve Open\n");
     sleep(3);
-    digitalWrite(GPIO_P7, LOW);
-    digitalWrite(GPIO_P8, LOW);
+    digitalWrite(gpio_by_pin(GPIO_P7), LOW);
+    digitalWrite(gpio_by_pin(GPIO_P8), LOW);
 
 }
 
 void close_valve(void){
-    digitalWrite(GPIO_P7, HIGH);
-    digitalWrite(GPIO_P8, LOW);
+    digitalWrite(gpio_by_pin(GPIO_P7), HIGH);
+    digitalWrite(gpio_by_pin(GPIO_P8), LOW);
     printf("Valve Closed\n");
     sleep(3);
-    digitalWrite(GPIO_P7, LOW);
-    digitalWrite(GPIO_P8, LOW);
+    digitalWrite(gpio_by_pin(GPIO_P7), LOW);
+    digitalWrite(gpio_by_pin(GPIO_P8), LOW);
 }
 
 
@@ -83,55 +83,53 @@ int main(){
     int x;
     int loop1, loop2;
 
-    if (!init_96Boards_GPIO_library("dragon")){
-        // Open the GPIO for use.  Do so by pin number on the 
-        // Low Speed Expansion Connector. This could have been
-        // done in other ways too.
-        for (x=GPIO_OFFSET;x<GPIO_OFFSET+NUM_PINS;x++){
-            open_GPIO_Board_pin_number(gpio_p[x]);
-            // Now set allports that we are using to out
-            setup_GPIO(gpio_p[x], "out");
+    // Open the GPIO for use.  Do so by pin number on the 
+    // Low Speed Expansion Connector. This could have been
+    // done in other ways too.
+    for (x=GPIO_OFFSET;x<GPIO_OFFSET+NUM_PINS;x++){
+        if (gpio_open(gpio_by_pin(gpio_p[x]), "out")){
+            fprintf(stderr, "Unable to open pin %d\n", gpio_p[x]);
+            return(-1);
+        }
+    }
+    
+    for (loop1 = 500;loop1;loop1--){
+        open_valve();
+        for( loop2 = 5;loop2;loop2--){
+            for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
+                relay_on(gpio_by_pin(gpio_p[x]));
+            }
+            for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
+                relay_off(gpio_by_pin(gpio_p[x]));
+            }
+        }
+        for( loop2 = 5;loop2;loop2--){
+            for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
+                relay_on(gpio_by_pin(gpio_p[x]));
+            }
+            for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
+                relay_off(gpio_by_pin(gpio_p[x]));
+            }
+        }
+        close_valve();
+        for( loop2 = 5;loop2;loop2--){
+            for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
+                relay_on(gpio_by_pin(gpio_p[x]));
+            }
+            for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
+                relay_off(gpio_by_pin(gpio_p[x]));
+            }
+        }
+        for( loop2 = 5;loop2;loop2--){
+            for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
+                relay_on(gpio_by_pin(gpio_p[x]));
+            }
+            for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
+                relay_off(gpio_by_pin(gpio_p[x]));
+            }
         }
         
-        for (loop1 = 500;loop1;loop1--){
-            open_valve();
-            for( loop2 = 5;loop2;loop2--){
-                for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_on(gpio_p[x]);
-                }
-                for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_off(gpio_p[x]);
-                }
-            }
-            for( loop2 = 5;loop2;loop2--){
-                for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_on(gpio_p[x]);
-                }
-                for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_off(gpio_p[x]);
-                }
-            }
-            close_valve();
-            for( loop2 = 5;loop2;loop2--){
-                for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_on(gpio_p[x]);
-                }
-                for (x=GPIO_OFFSET;x<GPIO_OFFSET+6;x++){
-                    relay_off(gpio_p[x]);
-                }
-            }
-            for( loop2 = 5;loop2;loop2--){
-                for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_on(gpio_p[x]);
-                }
-                for (x=GPIO_OFFSET+5;x>=GPIO_OFFSET;x--){
-                    relay_off(gpio_p[x]);
-                }
-            }
-            
-        }
-        sleep(5);
-
     }
+    sleep(5);
     return (0);
 }

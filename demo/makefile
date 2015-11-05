@@ -23,7 +23,7 @@ LFLAGS =  -L/usr/local/lib
 # define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
 #   option, something like (this will link in libmylib.so and libm.so:
-LIBS = -l96BoardsGPIO
+LIBS = -l96BoardsGPIO -lsoc
 
 # define the C source files
 SRCS = demo.c
